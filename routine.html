@@ -1161,19 +1161,17 @@ renderProfile();
 <script>
 (function(){
   var bar=document.getElementById('installBar'),btn=document.getElementById('installBtn'),txt=document.getElementById('installTxt'),close=document.getElementById('installClose');
+  if(!bar)return;
   var dp=null;
   var standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
-  var dismissed=false;try{dismissed=localStorage.getItem('pwa_install_dismissed')==='1';}catch(e){}
-  function show(){if(!standalone&&!dismissed)bar.classList.add('show');}
+  function show(){if(!standalone)bar.classList.add('show');}
   function hide(){bar.classList.remove('show');}
-  if(close)close.addEventListener('click',function(){hide();try{localStorage.setItem('pwa_install_dismissed','1');}catch(e){}});
+  if(close)close.addEventListener('click',hide);
   window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;if(btn)btn.style.display='';show();});
   if(btn)btn.addEventListener('click',function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;hide();});});
-  window.addEventListener('appinstalled',function(){hide();try{localStorage.setItem('pwa_install_dismissed','1');}catch(e){}});
+  window.addEventListener('appinstalled',hide);
   var ua=navigator.userAgent||'';
-  var isIOS=/iphone|ipad|ipod/i.test(ua);
-  var isSafari=/safari/i.test(ua)&&!/crios|fxios|edgios/i.test(ua);
-  if(isIOS&&!standalone&&!dismissed){if(btn)btn.style.display='none';if(txt)txt.innerHTML='Pour installer : appuie sur Partager puis « Sur l\'écran d\'accueil »';show();}
+  if(/iphone|ipad|ipod/i.test(ua)&&!standalone){if(btn)btn.style.display='none';if(txt)txt.innerHTML='Pour installer : appuie sur Partager puis « Sur l\'écran d\'accueil »';show();}
 })();
 </script>
 </body>
