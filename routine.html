@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Routine">
   <link rel="manifest" href="routine.webmanifest">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22112%22%20fill%3D%22%233E6E55%22%2F%3E%3Crect%20x%3D%22140%22%20y%3D%22168%22%20width%3D%22232%22%20height%3D%2236%22%20rx%3D%2218%22%20fill%3D%22%23F4F2EC%22%2F%3E%3Crect%20x%3D%22140%22%20y%3D%22238%22%20width%3D%22232%22%20height%3D%2236%22%20rx%3D%2218%22%20fill%3D%22%23F4F2EC%22%2F%3E%3Crect%20x%3D%22140%22%20y%3D%22308%22%20width%3D%22170%22%20height%3D%2236%22%20rx%3D%2218%22%20fill%3D%22%23F4F2EC%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="apple-touch-icon" href="routine-192.png">
 <title>Routine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -257,8 +257,17 @@ header{padding:22px 0 14px;display:flex;align-items:center;justify-content:space
 .tab.active{color:var(--accent)}
 @media print{.tabbar{display:none}body{padding-bottom:0;background:#fff}.view{display:block!important}}
 </style>
+<style>
+#installBar{position:fixed;top:0;left:0;right:0;z-index:90;background:#3E6E55;color:#fff;display:none;align-items:center;gap:10px;padding:11px 14px;font-size:13.5px;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+#installBar.show{display:flex}
+#installBar b{flex:1;font-weight:600;line-height:1.35}
+#installBar button{border:none;border-radius:8px;padding:8px 12px;font-weight:600;font-size:13px;cursor:pointer}
+#installBtn{background:#fff;color:#3E6E55}
+#installClose{background:transparent;color:#fff;padding:8px 6px;font-size:16px}
+</style>
 </head>
 <body>
+<div id="installBar"><b id="installTxt">Installer l'app sur ton écran d'accueil</b><button id="installBtn">Installer</button><button id="installClose" aria-label="Fermer">✕</button></div>
 <div class="wrap">
   <header>
     <div class="logo">Routine<small>entraînement · santé</small></div>
@@ -1149,5 +1158,23 @@ renderGainage();
 renderProfile();
 </script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js').catch(function(){});});}</script>
+<script>
+(function(){
+  var bar=document.getElementById('installBar'),btn=document.getElementById('installBtn'),txt=document.getElementById('installTxt'),close=document.getElementById('installClose');
+  var dp=null;
+  var standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  var dismissed=false;try{dismissed=localStorage.getItem('pwa_install_dismissed')==='1';}catch(e){}
+  function show(){if(!standalone&&!dismissed)bar.classList.add('show');}
+  function hide(){bar.classList.remove('show');}
+  if(close)close.addEventListener('click',function(){hide();try{localStorage.setItem('pwa_install_dismissed','1');}catch(e){}});
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;if(btn)btn.style.display='';show();});
+  if(btn)btn.addEventListener('click',function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;hide();});});
+  window.addEventListener('appinstalled',function(){hide();try{localStorage.setItem('pwa_install_dismissed','1');}catch(e){}});
+  var ua=navigator.userAgent||'';
+  var isIOS=/iphone|ipad|ipod/i.test(ua);
+  var isSafari=/safari/i.test(ua)&&!/crios|fxios|edgios/i.test(ua);
+  if(isIOS&&!standalone&&!dismissed){if(btn)btn.style.display='none';if(txt)txt.innerHTML='Pour installer : appuie sur Partager puis « Sur l\'écran d\'accueil »';show();}
+})();
+</script>
 </body>
 </html>
