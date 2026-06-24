@@ -1,5 +1,5 @@
 /* Service worker — cache runtime pour usage hors-ligne */
-const CACHE='app-pwa-v1';
+const CACHE='app-pwa-v3';
 self.addEventListener('install',e=>{self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)));await self.clients.claim();})());});
 self.addEventListener('fetch',e=>{
