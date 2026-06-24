@@ -411,24 +411,6 @@ header{padding:22px 0 14px;display:flex;align-items:center;justify-content:space
     <p class="note">Les séances faites sortent du menu d'« Aujourd'hui » jusqu'à ce que tu aies bouclé le tour. Touche une séance pour le détail.</p>
   </section>
 
-  <!-- WOD -->
-  <section class="view" id="v-wod">
-    <div class="sect">Générateur de séance</div>
-    <div class="mini">
-      <div class="cap">Temps disponible</div>
-      <div class="chips" id="wodTime"></div>
-      <div class="cap" style="margin-top:15px">Zone à travailler</div>
-      <div class="chips" id="wodFocus"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:15px">
-        <span class="cap" style="margin:0">Matériel dispo <span style="text-transform:none;letter-spacing:0;font-weight:400">(poids du corps inclus)</span></span>
-        <button class="allbtn" id="equipAllBtn" onclick="toggleAllEquip()">Tout décocher</button>
-      </div>
-      <div class="chips" id="wodEquip"></div>
-      <button class="gen-btn" onclick="generateWod()">Générer la séance</button>
-    </div>
-    <div id="wodOut"></div>
-  </section>
-
   <!-- PROGRÈS -->
   <section class="view" id="v-progres">
     <div class="sect">BOLT dans le temps</div>
@@ -511,7 +493,6 @@ header{padding:22px 0 14px;display:flex;align-items:center;justify-content:space
 <nav class="tabbar"><div class="tabbar-in">
   <button class="tab active" data-v="jour" onclick="go('jour')"><span class="ti">◉</span>Aujourd'hui</button>
   <button class="tab" data-v="semaine" onclick="go('semaine')"><span class="ti">▦</span>Semaine</button>
-  <button class="tab" data-v="wod" onclick="go('wod')"><span class="ti">⚡</span>WOD</button>
   <button class="tab" data-v="progres" onclick="go('progres')"><span class="ti">📈</span>Progrès</button>
   <button class="tab" data-v="reflexes" onclick="go('reflexes')"><span class="ti">🫁</span>Réflexes</button>
 </div></nav>
@@ -1195,7 +1176,6 @@ function renderProgres(){
 }
 
 renderAll();
-initWod();
 renderSoirPostures();
 renderGainage();
 renderProfile();
